@@ -43,6 +43,11 @@ public class FileSetProcessor implements Enumeration<File> {
         return file;
     }
 
+    public void reset() {
+        currentDir = 0;
+        currentFileInDir = 0;
+    }
+
     private File getCurrentFile() {
         return files[currentDir][currentFileInDir];
     }
