@@ -31,6 +31,11 @@ public class ClassificationTaskHelper {
         fMeasure = safeDivision(2 * precision * recall, precision + recall);
     }
 
+    public void reset() {
+        tp = fn = fp = tn = 0D;
+        precision = recall = fMeasure = 0D;
+    }
+
     public double getPrecision() {
         return precision;
     }
