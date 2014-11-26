@@ -18,7 +18,7 @@ public class SVD {
     private final Map<Long, Double> bi; //-//- item i
     private final double GAMMA = 0.005;
     private final double LAMBDA = 0.02;
-    private final int ITERATION_COUNT = 333;
+    private final int ITERATION_COUNT = 1000;
     private double mu = 0D;
 
     SVD(int f) {
@@ -36,7 +36,7 @@ public class SVD {
         double prevRmse = 0;
         double rmse = 1;
         int iter = 0;
-        while (ITERATION_COUNT > iter || Math.abs(rmse - prevRmse) > 0.00001) {
+        while (ITERATION_COUNT > iter && Math.abs(rmse - prevRmse) > 0.00001) {
             iter++;
             prevRmse = rmse;
             rmse = 0;
