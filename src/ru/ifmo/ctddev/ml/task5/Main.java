@@ -30,7 +30,6 @@ public class Main {
             File file = new File(filename);
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String line = bufferedReader.readLine();
-            System.out.println("learn"+line);
             while ((line = bufferedReader.readLine()) != null) {
                 long[] items = getItems(line);
                 features.add(new Feature(items[0], items[1], items[2]));
@@ -43,7 +42,6 @@ public class Main {
             PrintWriter printWriter = new PrintWriter(new File(OUTPUT));
             printWriter.println("id,rating");
             String line = bufferedReader.readLine();
-            System.out.println("pr"+line);
             while ((line = bufferedReader.readLine()) != null) {
                 long[] items = getItems(line);
                 printWriter.println(items[0] + "," + svd.getRating(items[1], items[2]));
