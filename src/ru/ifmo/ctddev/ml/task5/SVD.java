@@ -3,6 +3,7 @@ package ru.ifmo.ctddev.ml.task5;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Nechaev Mikhail
@@ -12,14 +13,16 @@ public class SVD {
 
     //Recommender Systems Handbook, p.152
     private final int f;
+    private final Random random = new Random();
     private final Map<Long, double[]> pu; //user
     private final Map<Long, double[]> qi; //item
     private final Map<Long, Double> bu; //deviations of user u from the average
     private final Map<Long, Double> bi; //-//- item i
-    private final double GAMMA = 0.005;
-    private final double LAMBDA = 0.02;
-    private final int ITERATION_COUNT = 1000;
-    private double mu = 0D;
+    private final double GAMMA = 0.005D;
+    private final double LAMBDA = 0.02D;
+    private final int ITERATION_COUNT = 100;
+    private double mu = 0.D;
+
 
     SVD(int f) {
         this.f = f;
@@ -33,8 +36,8 @@ public class SVD {
         features.stream().forEach((feature) -> add(feature.getUser(), feature.getItem()));
         mu = features.stream().mapToDouble(Feature::getRating).average().getAsDouble();
 
-        double prevRmse = 0;
-        double rmse = 1;
+        double prevRmse = 0.D;
+        double rmse = 1.D;
         int iter = 0;
         while (ITERATION_COUNT > iter && Math.abs(rmse - prevRmse) > 0.00001) {
             iter++;
@@ -61,10 +64,18 @@ public class SVD {
     }
 
     private void add(long user, long item) {
-        pu.putIfAbsent(user, new double[f]);
-        qi.putIfAbsent(item, new double[f]);
+        pu.putIfAbsent(user, getRandomArray());
+        qi.putIfAbsent(item, getRandomArray());
         bu.putIfAbsent(user, 0.D);
         bi.putIfAbsent(item, 0.D);
+    }
+
+    private double[] getRandomArray() {
+        double[] a = new double[f];
+        for (int i = 0; i < f; i++) {
+            a[i] = random.nextDouble();
+        }
+        return a;
     }
 
     private double dotProduct(double[] q_i, double[] p_u) {
@@ -76,7 +87,7 @@ public class SVD {
     }
 
     public double getRating(long user, long item) {
-        add(user, item);
-        return mu + bu.get(user) + bi.get(item) + dotProduct(pu.get(user), qi.get(item));
+        return mu + bu.getOrDefault(user, 0.D) + bi.getOrDefault(item, 0.D)
+                + dotProduct(pu.getOrDefault(user, new double[f]), qi.getOrDefault(item, new double[f]));
     }
 }
